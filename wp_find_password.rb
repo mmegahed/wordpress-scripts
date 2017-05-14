@@ -7,6 +7,7 @@ require 'uri'
 
 
 def wp_find_password(options)
+  # https://github.com/danielmiessler/SecLists/blob/master/Passwords/Sucuri_Top_Wordpress_Passwords.txt
   passwords = %w(admin 123456 password 12345678 typhoon 666666 111111 1234567 qwerty
                  siteadmin qwerty siteadmin administrator root 123123 123321
                  1234567890 letmein123 test123 demo123 pass123 123qwe qwe123 654321 loveyou adminadmin123)
