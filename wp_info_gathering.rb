@@ -5,36 +5,31 @@ require 'rubygems'
 require 'nokogiri'
 require 'net/http'
 require 'optparse'
+require 'open-uri'
 
 
 def get_wordpress_version(url)
-  doc = Nokogiri::HTML(open(url))
+  doc = Nokogiri::HTML(open(url).read)
   doc.xpath("//meta[@name='generator']/@content").each do |attr|
     puts attr.value
   end
 end
 
 def xmlrpc_protocol_enabled?(url)
-  url = URI.parse(url+'/xmlrpc.php')
-  req = Net::HTTP.new(url.host, url.port)
-  res = req.request_head(url.path)
-  msg = "XML-RPC protocol for #{url} disabled"
+  uri = URI(url + '/xmlrpc.php')
+  response = Net::HTTP.get(uri)
   
-  if res.code == "405"
-    msg =  "XML-RPC protocol on #{url} enabled"
-  end
-  msg
+  puts "\n#{response}\n"
 end
 
 def enumerate_users(url, cnt)
-  users = []
-  for i in 0..cnt
-    url = URI.parse(url)
-    req = Net::HTTP.new(url.host, url.port)
-    res = req.request_head(url.path)
-    puts res.code
-    if res.code == "301"
-     users << i
+  for i in 1..cnt do
+    uri = URI(url + "/?author=#{i}")
+    response = Net::HTTP.get_response(uri)
+    hash_response = response.to_hash
+
+    if response.code == '301'
+      puts "\nUsername: #{hash_response['location'].first.split('/').last} for author=#{i}\n"
     end
   end
 end
@@ -55,7 +50,7 @@ def wp_info_gathering(options)
   end
 end
 
-options = {:url => 'http://127.0.0.1:8080', :wp_version => true, :xmlrpc => true, :enumarate => true, :enumeration_number => 3}
+options = {:url => 'http://127.0.0.1:8080/wordpress', :wp_version => true, :xmlrpc => true, :enumarate => true, :enumeration_number => 3}
 
 OptionParser.new do |opts|
   opts.banner = "Usage: wp_info_gathering.rb [options]"
