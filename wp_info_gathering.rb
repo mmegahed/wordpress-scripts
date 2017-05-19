@@ -23,7 +23,7 @@ def xmlrpc_protocol_enabled?(url)
 end
 
 def enumerate_users(url, cnt)
-  for i in 1..cnt do
+  for i in 1..cnt.to_i do
     uri = URI(url + "/?author=#{i}")
     response = Net::HTTP.get_response(uri)
     hash_response = response.to_hash
@@ -50,24 +50,21 @@ def wp_info_gathering(options)
   end
 end
 
-options = {:url => 'http://127.0.0.1:8080/wordpress', :wp_version => true, :xmlrpc => true, :enumarate => true, :enumeration_number => 3}
+options = {:url => 'http://127.0.0.1:8080/wordpress', :wp_version => false, :xmlrpc => false, :enumarate => false, :enumeration_number => '3'}
 
 OptionParser.new do |opts|
   opts.banner = "Usage: wp_info_gathering.rb [options]"
-  opts.on('--url url', 'Url, default: http://127.0.0.1') do |url|
+
+  opts.on('-u', '--url url', 'Url, default: http://127.0.0.1') do |url|
     options[:url] = url
   end
+
+  opts.on('-w', '--wp-version', 'Display wordpress version')   { options[:wp_version] = true }
+  opts.on('-x', '--xmlrpc', 'Check if XML-RPC API enabled')    { options[:xmlrpc]     = true }
+  opts.on('-e', '--enumarate', 'Enumerate users')              { options[:enumarate]  = true }
   
-  opts.on('-w', '--wp-version', 'Display wordpress version') do |version|
-    options[:version] = true
-  end
-
-  opts.on('-x', '--xmlrpc', 'Check if XML-RPC API enabled') do |enabled|
-    options[:version] = true
-  end
-
-  opts.on('-e', '--enumarate', 'Enumerate users') do |version|
-    options[:version] = true
+  opts.on('-n', '--enumaration_number enumaration_number', 'Max enumeration number, default is 3') do |enumaration_number|
+    options[:enumeration_number] = enumaration_number
   end
 
   opts.on('-h', '--help', 'Displays Help') do
