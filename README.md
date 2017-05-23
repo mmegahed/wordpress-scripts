@@ -9,7 +9,7 @@ usage: wp_info_gathering -u 'http://127.0.0.1:8080' -wxe -n 2, will get version,
 
 Password lists taken from [SecList](https://github.com/danielmiessler/SecLists/tree/master/Passwords).
 
-[wp_single_page_analysis](http://warolv.net/blog/2017/05/22/wordpress-single-page-analysis-or-passive-information-gathering/) - Wordpress single page analysis or passive information gathering, script to gather information about wordpress loading single page only
+[wp_single_page_analysis](http://warolv.net/blog/2017/05/22/wordpress-single-page-analysis-or-passive-information-gathering/) - wordpress single page analysis or passive information gathering, script to gather information about wordpress loading single page only
 
 ## License
 
